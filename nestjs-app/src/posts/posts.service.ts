@@ -97,6 +97,7 @@ export class PostsService extends MysqlBaseService<PostsEntity, PostsDto> {
     postId: string,
     commentData: CommentDto,
   ): Promise<CommentDto[]> {
+    console.log(commentData);
     const post = await this.postRepository.findOne({
       where: {
         id: postId,

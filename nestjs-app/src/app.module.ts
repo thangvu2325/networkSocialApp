@@ -9,23 +9,26 @@ import { UserEntity } from './users/user.entity';
 import { PostsEntity } from './posts/posts.entity';
 import { PostsModule } from './posts/posts.module';
 import { CommentEntity } from './posts/comment.entity';
-
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        name: 'default',
-        type: 'mysql',
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        username: configService.get('DB_USER'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_DATABASE'),
-        entities: [CommentEntity, PostsEntity, UserEntity],
-        synchronize: false,
-      }),
+      useFactory: (configService: ConfigService) => {
+        return {
+          name: 'default',
+          type: 'mysql',
+          host: configService.get('DB_HOST'),
+          port: configService.get('DB_PORT'),
+          username: configService.get('DB_USER'),
+          password: configService.get('DB_PASSWORD'),
+          database: configService.get('DB_DATABASE'),
+          entities: [CommentEntity, PostsEntity, UserEntity],
+          logger: 'advanced-console',
+          logging: 'all',
+          synchronize: true,
+        };
+      },
     }),
     UsersModule,
     PostsModule,
