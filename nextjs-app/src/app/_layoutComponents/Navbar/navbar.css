@@ -1,0 +1,10 @@
+.navScroll::-webkit-scrollbar {
+  width: 2px;
+  background-color: transparent;
+}
+.navScroll::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+}
+.navScroll::-webkit-scrollbar-track {
+  background-color: transparent;
+}
