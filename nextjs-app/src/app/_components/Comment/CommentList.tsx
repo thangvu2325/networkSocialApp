@@ -6,8 +6,11 @@ import {
   Fragment,
 } from "react";
 import dynamic from "next/dynamic";
+import { createAxios } from "@/app/_services/createInstance";
+import { useQuery } from "@tanstack/react-query";
+import { getCommentfromPostId } from "@/app/_services/api";
 interface CommentListProps {
-  data: Array<commentType>;
+  postId: string;
   forwardedRef: Ref<HTMLDivElement>;
   style?: CSSProperties;
   className?: string | undefined;
@@ -19,24 +22,48 @@ const DynamicCommentBoxComponent = dynamic(() => import("./CommentBox"), {
 const COMMENTS_PER_LOAD = 10;
 
 const CommentList: FunctionComponent<CommentListProps> = ({
-  data,
+  postId,
   forwardedRef,
   style,
   className,
   showAllComment = false,
 }) => {
   const [showMore, setShowMore] = useState<number>(0);
-  const INITIAL_COMMENTS_TO_SHOW = showAllComment ? 10 : 2;
-  const visibleComments = data.slice(
-    0,
-    INITIAL_COMMENTS_TO_SHOW + COMMENTS_PER_LOAD * showMore
-  );
-  const remainingComments =
-    data.length - (INITIAL_COMMENTS_TO_SHOW + COMMENTS_PER_LOAD * showMore);
-  const commentsToLoad =
-    remainingComments > COMMENTS_PER_LOAD
-      ? COMMENTS_PER_LOAD
-      : remainingComments;
+  const axiosClient = createAxios();
+  const { isLoading, data } = useQuery({
+    queryKey: ["commentData", postId],
+    queryFn: async () => {
+      try {
+        const commentData = await getCommentfromPostId(axiosClient, postId);
+        return commentData;
+      } catch (error) {
+        throw new Error("Failed to fetch comments.");
+      }
+    },
+  });
+  let visibleComments: commentType[] = [];
+  let remainingComments = 0;
+  let commentsToLoad = 0;
+  if (!isLoading) {
+    const commentData: commentType[] = data || [];
+
+    const INITIAL_COMMENTS_TO_SHOW = showAllComment ? 10 : 2;
+
+    visibleComments =
+      commentData?.slice(
+        0,
+        INITIAL_COMMENTS_TO_SHOW + COMMENTS_PER_LOAD * showMore
+      ) || [];
+
+    remainingComments =
+      commentData?.length -
+        (INITIAL_COMMENTS_TO_SHOW + COMMENTS_PER_LOAD * showMore) || 0;
+    commentsToLoad =
+      remainingComments > COMMENTS_PER_LOAD
+        ? COMMENTS_PER_LOAD
+        : remainingComments;
+  }
+
   return (
     <div
       ref={forwardedRef}
@@ -73,14 +100,20 @@ const CommentList: FunctionComponent<CommentListProps> = ({
           Xem thêm {commentsToLoad} bình luận
         </span>
       ) : (
-        <span
-          className="mt-[16px] mb-[8px] rounded-[4px] font-[600] text-[14px] hover:underline cursor-pointer"
-          onClick={() => {
-            setShowMore(0);
-          }}
-        >
-          Ẩn bình luận
-        </span>
+        <Fragment>
+          {!isLoading && data.length ? (
+            <span
+              className="mt-[16px] mb-[8px] rounded-[4px] font-[600] text-[14px] hover:underline cursor-pointer"
+              onClick={() => {
+                setShowMore(0);
+              }}
+            >
+              Ẩn bình luận
+            </span>
+          ) : (
+            ""
+          )}
+        </Fragment>
       )}
     </div>
   );

@@ -7,16 +7,21 @@ export class UsersDto extends BaseDto {
   @Transform(({ obj }) => obj.firstName + ' ' + obj.lastName)
   @Expose()
   fullName: string;
+
   @Expose()
+  nickName: string;
+
   firstName: string;
-  @Expose()
+
   lastName: string;
+
   @Expose()
-  userName: string;
+  username: string;
   @Expose()
   email: string;
-  @Expose()
+
   password: string;
+
   @Expose()
   bio: string;
   @Expose()

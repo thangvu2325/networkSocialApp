@@ -30,7 +30,7 @@ export type navData = {
 };
 const navDataNewFeeds: Array<navData> = [
   {
-    id: "1",
+    id: "20001",
     href: "newsfeed",
     avatar: (
       <div className="w-[45px] h-[45px] bg-gradient-to-r from-[#0575e6] to-[#021b79] rounded-[45px] relative">
@@ -45,7 +45,7 @@ const navDataNewFeeds: Array<navData> = [
     title: "Newsfeed",
   },
   {
-    id: "2",
+    id: "20002",
     href: "badges",
     avatar: (
       <div className="w-[45px] h-[45px] bg-gradient-to-r from-[#e44d26] to-[#f16529] rounded-[45px] relative ">
@@ -60,7 +60,7 @@ const navDataNewFeeds: Array<navData> = [
     title: "Badges",
   },
   {
-    id: "3",
+    id: "20003",
     href: "stories",
     avatar: (
       <div className="w-[45px] h-[45px] bg-gradient-to-r from-[#f2994a] to-[#f2c94c] rounded-[45px] relative">
@@ -75,7 +75,7 @@ const navDataNewFeeds: Array<navData> = [
     title: "Explore Stories",
   },
   {
-    id: "4",
+    id: "20004",
     href: "group",
     avatar: (
       <div className="w-[45px] h-[45px] bg-gradient-to-r from-[#ee0979] to-[#ff6a00] rounded-[45px] relative ">
@@ -90,7 +90,7 @@ const navDataNewFeeds: Array<navData> = [
     title: "Popular Groups",
   },
   {
-    id: "5",
+    id: "20005",
     href: "user-page",
     avatar: (
       <div className="w-[45px] h-[45px] bg-gradient-to-r from-iconColor to-[#09f] rounded-[45px] relative">
@@ -108,7 +108,7 @@ const navDataNewFeeds: Array<navData> = [
 const navDataMorePages: Array<navData> = [
   {
     type: "Badge-Orange",
-    id: "6",
+    id: "20006",
     href: "email-box",
     avatar: (
       <div className="w-[45px] h-[45px]  rounded-[45px] relative  mr-[16px]">
@@ -124,7 +124,7 @@ const navDataMorePages: Array<navData> = [
     count: 584,
   },
   {
-    id: "7",
+    id: "20007",
     href: "hotel",
     avatar: (
       <div className="w-[45px] h-[45px]  rounded-[45px] relative  mr-[16px]">
@@ -139,7 +139,7 @@ const navDataMorePages: Array<navData> = [
     title: "Near Hotel",
   },
   {
-    id: "8",
+    id: "20008",
     href: "event",
     avatar: (
       <div className="w-[45px] h-[45px]  rounded-[45px] relative  mr-[16px]">
@@ -154,7 +154,7 @@ const navDataMorePages: Array<navData> = [
     title: "Lastest Event",
   },
   {
-    id: "9",
+    id: "20009",
     href: "live-stream",
     avatar: (
       <div className="w-[45px] h-[45px]  rounded-[45px] relative  mr-[16px]">
@@ -171,7 +171,7 @@ const navDataMorePages: Array<navData> = [
 ];
 const navDataMoreAccount: Array<navData> = [
   {
-    id: "21",
+    id: "200021",
     href: "settings",
     avatar: (
       <div className="w-[45px] h-[45px]  rounded-[45px] relative  mr-[16px]">
@@ -186,7 +186,7 @@ const navDataMoreAccount: Array<navData> = [
     title: "Settings",
   },
   {
-    id: "22",
+    id: "200022",
     href: "analytics",
     avatar: (
       <div className="w-[45px] h-[45px]  rounded-[45px] relative  mr-[16px]">
@@ -201,7 +201,7 @@ const navDataMoreAccount: Array<navData> = [
     title: "Analytics",
   },
   {
-    id: "23",
+    id: "200023",
     type: "Badge-Orange",
     href: "message",
     avatar: (

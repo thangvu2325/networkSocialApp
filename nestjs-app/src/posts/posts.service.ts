@@ -27,7 +27,7 @@ export class PostsService extends MysqlBaseService<PostsEntity, PostsDto> {
     const qb = await this.postRepository
       .createQueryBuilder('posts')
       .leftJoinAndSelect('posts.user', 'user')
-      .leftJoinAndSelect('posts.comments', 'comment');
+      .leftJoinAndSelect('posts.comments', 'comments');
 
     qb.where('1 = 1');
 
@@ -48,7 +48,7 @@ export class PostsService extends MysqlBaseService<PostsEntity, PostsDto> {
       const transformedUser = plainToClass(UsersDto, post.user, {
         excludeExtraneousValues: true,
       });
-      const transformedComment = plainToClass(UsersDto, post.comments, {
+      const transformedComment = plainToInstance(CommentDto, post.comments, {
         excludeExtraneousValues: true,
       });
       return plainToInstance(
@@ -84,14 +84,32 @@ export class PostsService extends MysqlBaseService<PostsEntity, PostsDto> {
   }
   // Commemnt
   async findComments(postId): Promise<CommentDto[]> {
-    const post = await this.postRepository.findOne({
-      where: {
-        id: postId,
-      },
+    const post = await this.postRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.comments', 'comment')
+      .leftJoinAndSelect('comment.user', 'user')
+      .where('post.id = :postId', { postId })
+      .getOne();
+
+    if (!post) {
+      throw new Error(`Post with ID ${postId} not found.`);
+    }
+
+    const commentArray = post.comments.map((comment) => {
+      const transformedUser = plainToClass(UsersDto, comment.user, {
+        excludeExtraneousValues: true,
+      });
+
+      return plainToInstance(
+        CommentDto,
+        { ...comment, user: transformedUser, postId: post.id },
+        {
+          excludeExtraneousValues: true,
+        },
+      );
     });
-    return plainToInstance(CommentDto, post.comments, {
-      excludeExtraneousValues: true,
-    });
+
+    return commentArray;
   }
   async addComment(
     postId: string,
@@ -104,7 +122,7 @@ export class PostsService extends MysqlBaseService<PostsEntity, PostsDto> {
     });
     const user = await this.usersService.findOne({
       where: {
-        id: commentData.userId,
+        id: commentData.user.id,
       },
     });
 
@@ -117,9 +135,7 @@ export class PostsService extends MysqlBaseService<PostsEntity, PostsDto> {
     }
 
     let comment = new CommentEntity();
-
     comment = { ...commentData, post, user };
-
     this.commentRepository.save(comment);
     return plainToInstance(CommentDto, post.comments, {
       excludeExtraneousValues: true,
@@ -137,7 +153,7 @@ export class PostsService extends MysqlBaseService<PostsEntity, PostsDto> {
     });
     const user = await this.usersService.findOne({
       where: {
-        id: commentData.userId,
+        id: commentData.user.id,
       },
     });
 

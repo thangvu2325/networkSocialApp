@@ -1,6 +1,6 @@
 type postType = {
   id: string;
-  userId: string;
+  user: userType;
   text: string;
   images: Array<image>;
   videos?: Array<video>;
@@ -8,8 +8,8 @@ type postType = {
   disLikes: Array<emotionType>;
   shares: Array<shareType>;
   comments: Array<commentType>;
-  createdAt: Date;
-  updateAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };
 type imageType = {
   url: string;
@@ -22,11 +22,12 @@ type videoType = {
 type commentType = {
   id: string;
   text: string;
-  userId: string;
-  postId: string;
+  post: postType;
   likes: Array<emotionType>;
   disLikes: Array<emotionType>;
   commentList: Array<commentType>;
+  user: userType;
+  postId: string;
 };
 type shareType = {
   id: string;
@@ -38,6 +39,12 @@ type emotionType = {
 };
 type userType = {
   username: string;
-  avatar: string;
   id: string;
+  fullName: string;
+  image: string;
+  email: string;
+  userName: string;
+  bio: string;
+  roles: string;
+  nickName: string;
 };

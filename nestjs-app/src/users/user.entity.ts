@@ -9,12 +9,14 @@ import * as bcrypt from 'bcrypt';
   name: 'user',
 })
 export class UserEntity extends BaseEntity {
-  @Column({ length: 50 })
+  @Column({ length: 50, default: null })
   firstName: string;
-  @Column()
+  @Column({ length: 50, default: null })
   lastName: string;
   @Column({ unique: true })
-  userName: string;
+  username: string;
+  @Column()
+  nickName: string;
   @Column({ default: null, unique: true })
   @IsEmail()
   email: string;

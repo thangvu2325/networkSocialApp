@@ -11,27 +11,27 @@ interface SidebarProps {}
 const sidebarDataContacts: Array<navData> = [
   {
     type: "Dot-Offline",
-    id: "10",
+    id: "100010",
     avatar: "https://uitheme.net/sociala/images/user-8.png",
     title: "Hurin Seary",
   },
   {
     time: "4:09 pm",
     type: "Time",
-    id: "11",
+    id: "100011",
     avatar: "https://uitheme.net/sociala/images/user-8.png",
     title: "Hurin Seary",
   },
   {
     type: "Badge-Blue",
     count: 20,
-    id: "12",
+    id: "100012",
     avatar: "https://uitheme.net/sociala/images/user-8.png",
     title: "Hurin Seary",
   },
   {
     type: "Dot-Online",
-    id: "13",
+    id: "100013",
     avatar: "https://uitheme.net/sociala/images/user-8.png",
     title: "Hurin Seary",
   },
@@ -39,20 +39,20 @@ const sidebarDataContacts: Array<navData> = [
 const sidebarDataGroups: Array<navData> = [
   {
     type: "Dot-Offline",
-    id: "21",
+    id: "100021",
     avatar: "",
     title: "Studio Express",
   },
   {
     type: "Dot-Offline",
-    id: "22",
+    id: "100022",
     avatar: "",
     title: "Armany Design",
   },
   {
     time: "4:09 pm",
     type: "Time",
-    id: "23",
+    id: "100023",
     avatar: "",
 
     title: "De fabous",
@@ -61,13 +61,13 @@ const sidebarDataGroups: Array<navData> = [
 const sidebarDataPages: Array<navData> = [
   {
     type: "Dot-Offline",
-    id: "31",
+    id: "100031",
     avatar: "",
     title: "Armany Seary",
   },
   {
     type: "Dot-Offline",
-    id: "32",
+    id: "100032",
     avatar: "",
     title: "Armany Seary",
   },

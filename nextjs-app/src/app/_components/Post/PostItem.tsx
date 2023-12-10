@@ -15,10 +15,11 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   FunctionComponent,
-  useEffect,
   useCallback,
   useState,
   useRef,
+  lazy,
+  Suspense,
 } from "react";
 import ImagePreview from "../Image/ImagePreview";
 import CommentList from "../Comment/CommentList";
@@ -30,37 +31,19 @@ interface PostItemProps {
   className?: string | undefined;
   fullHeight?: boolean;
 }
-const getUserById = (id: string) => {
-  return {
-    id: id,
-    username: "Surfiya Zakir",
-    avatar: "https://uitheme.net/sociala/images/user-7.png",
-  };
-};
+
 const PostItem: FunctionComponent<PostItemProps> = ({
   postItem,
   fullHeight,
   className,
 }) => {
-  const [user, setUser] = useState<userType>({
-    avatar: "",
-    username: "",
-    id: "",
-  });
   const [emotion, setEmotion] = useState<emotionType[]>(postItem.likes ?? []);
   const commentListRef = useRef<HTMLDivElement>(null);
   const [showMoreText, setShowMoreText] = useState(false);
   const toggleShowMoreText = useCallback(() => {
     setShowMoreText((prev) => !prev);
   }, []);
-  useEffect(() => {
-    const fetchDataGetUser = (): void => {
-      const user = getUserById(postItem.userId);
-      setUser(user);
-    };
-    fetchDataGetUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
   return (
     <div
       className={`px-[24px] pt-[24px] pb-[16px] w-[100%] bg-[#fff] flex flex-col rounded-[15px] ${
@@ -69,19 +52,23 @@ const PostItem: FunctionComponent<PostItemProps> = ({
     >
       <div className="flex">
         <figure className="rounded-[45px] w-[45px] h-[45px] mr-[16px] mb-[16px] ">
-          <Image
-            src={"https://uitheme.net/sociala/images/user-7.png"}
-            width={45}
-            height={45}
-            alt="avatar"
-          ></Image>
+          <Suspense fallback={<span>0</span>}>
+            <Image
+              src={postItem.user.image}
+              width={45}
+              height={45}
+              className="rounded-[45px]"
+              loading="lazy"
+              alt="avatar"
+            ></Image>
+          </Suspense>
         </figure>
         <div className="flex flex-col mt-[4px] mb-[8px] text-[12px]">
           <span className="font-[700] text-[#212529]  leading-[1.2]">
-            <h2>{user.username}</h2>
+            <h2>{postItem.user.nickName}</h2>
           </span>
           <span className="mt-[4px] font-[500] text-[#adb5bd] leading-[1.4]">
-            <h3>{postItem.updateAt.toDateString()}</h3>
+            <h3>{new Date(postItem.updatedAt).toDateString()}</h3>
           </span>
         </div>
         <PopupMenu
@@ -271,7 +258,7 @@ const PostItem: FunctionComponent<PostItemProps> = ({
       <CommentList
         className="flex-1"
         showAllComment={fullHeight ?? false}
-        data={postItem?.comments}
+        postId={postItem?.id}
         forwardedRef={commentListRef}
       ></CommentList>
     </div>

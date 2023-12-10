@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import 'dotenv/config';
 
 declare const module: any;
 
@@ -21,7 +22,6 @@ async function bootstrap() {
 
   // This is necessary to make the hot-reload work with Docker
   if (module.hot) {
-    console.log(1);
     module.hot.accept();
     module.hot.dispose(() => app.close());
   }

@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { StoreModule } from 'src/store/store.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostsEntity } from './posts.entity';
 import { PostsController } from './posts.controller';
@@ -9,7 +8,6 @@ import { CommentEntity } from './comment.entity';
 
 @Module({
   imports: [
-    StoreModule,
     TypeOrmModule.forFeature([PostsEntity, CommentEntity]),
     UsersModule,
   ],

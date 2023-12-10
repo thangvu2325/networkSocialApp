@@ -2,13 +2,14 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { StoreModule } from './store/store.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserEntity } from './users/user.entity';
 import { PostsEntity } from './posts/posts.entity';
 import { PostsModule } from './posts/posts.module';
 import { CommentEntity } from './posts/comment.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -16,20 +17,21 @@ import { CommentEntity } from './posts/comment.entity';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        name: 'default',
         type: 'mysql',
-        host: configService.get('DB_HOST'),
-        port: configService.get('DB_PORT'),
-        username: configService.get('DB_USER'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_DATABASE'),
+        host: configService.get('MYSQLDB_HOST'),
+        port: configService.get('MYSQLDB_LOCAL_PORT'),
+        username: configService.get('MYSQLDB_USER'),
+        password: configService.get('MYSQLDB_PASSWORD'),
+        database: configService.get('MYSQLDB_DATABASE'),
         entities: [CommentEntity, PostsEntity, UserEntity],
-        synchronize: false,
+        synchronize: true,
       }),
     }),
+
     UsersModule,
     PostsModule,
-    StoreModule.forRoot(),
+    AuthModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [
