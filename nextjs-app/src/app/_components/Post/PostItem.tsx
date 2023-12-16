@@ -25,25 +25,28 @@ import ImagePreview from "../Image/ImagePreview";
 import CommentList from "../Comment/CommentList";
 import PopupMenu from "../PopupMenu";
 import PopupTemplate from "../PopupMenu/PopupTemple";
+import Avatar from "../Avatar";
 
 interface PostItemProps {
   postItem: postType;
   className?: string | undefined;
   fullHeight?: boolean;
+  imageShow?: boolean;
 }
 
 const PostItem: FunctionComponent<PostItemProps> = ({
   postItem,
   fullHeight,
   className,
+  imageShow = true,
 }) => {
-  const [emotion, setEmotion] = useState<emotionType[]>(postItem.likes ?? []);
+  const [emotion, setEmotion] = useState<emotionType[]>(postItem?.likes ?? []);
   const commentListRef = useRef<HTMLDivElement>(null);
   const [showMoreText, setShowMoreText] = useState(false);
   const toggleShowMoreText = useCallback(() => {
     setShowMoreText((prev) => !prev);
   }, []);
-
+  console.log(postItem);
   return (
     <div
       className={`px-[24px] pt-[24px] pb-[16px] w-[100%] bg-[#fff] flex flex-col rounded-[15px] ${
@@ -53,22 +56,21 @@ const PostItem: FunctionComponent<PostItemProps> = ({
       <div className="flex">
         <figure className="rounded-[45px] w-[45px] h-[45px] mr-[16px] mb-[16px] ">
           <Suspense fallback={<span>0</span>}>
-            <Image
-              src={postItem.user.image}
+            <Avatar
+              src={postItem?.user?.image ?? ""}
+              name={postItem?.user?.nickName ?? ""}
               width={45}
               height={45}
               className="rounded-[45px]"
-              loading="lazy"
-              alt="avatar"
-            ></Image>
+            ></Avatar>
           </Suspense>
         </figure>
         <div className="flex flex-col mt-[4px] mb-[8px] text-[12px]">
           <span className="font-[700] text-[#212529]  leading-[1.2]">
-            <h2>{postItem.user.nickName}</h2>
+            <h2>{postItem?.user?.nickName ?? ""}</h2>
           </span>
           <span className="mt-[4px] font-[500] text-[#adb5bd] leading-[1.4]">
-            <h3>{new Date(postItem.updatedAt).toDateString()}</h3>
+            <h3>{new Date(postItem?.updatedAt ?? "").toDateString()}</h3>
           </span>
         </div>
         <PopupMenu
@@ -147,22 +149,22 @@ const PostItem: FunctionComponent<PostItemProps> = ({
             className={` cursor-pointer text-ellipsis ${
               showMoreText
                 ? "line-clamp-none"
-                : postItem.images?.length
+                : postItem?.images?.length
                   ? "line-clamp-3"
                   : "line-clamp-6"
             } whitespace-pre-line `}
           >
-            {postItem.text}
+            {postItem?.text}
           </p>
         </span>
       </div>
       <div className="">
-        <div className="mx-[-15px] flex flex-wrap justify-center">
-          {postItem.images?.length
-            ? postItem.images
+        <div className="mx-[-15px] flex flex-wrap justify-left">
+          {imageShow && postItem?.images?.length
+            ? postItem?.images
                 .slice(0, 3)
-                .map((image: imageType, index, Array) => {
-                  const isLastElement: boolean = index === Array.length - 1;
+                .map((image: imageType, index, array) => {
+                  const isLastElement: boolean = index === array.length - 1;
                   return (
                     <div
                       className="p-[4px] sm:flex-grow-0 sm:flex-shrink-0 sm:basis-[auto] sm:w-[calc(100%/3)] relative"
@@ -239,7 +241,7 @@ const PostItem: FunctionComponent<PostItemProps> = ({
                 className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
               ></IconMessageCircle2>
             </span>
-            {postItem.comments?.length || 0} Comment
+            {postItem?.comments?.length || 0} Comment
           </motion.p>
         </span>
         <span className=" mr-[4px] ml-[auto]">
@@ -255,12 +257,12 @@ const PostItem: FunctionComponent<PostItemProps> = ({
           </p>
         </span>
       </div>
-      <CommentList
+      {/* <CommentList
         className="flex-1"
         showAllComment={fullHeight ?? false}
         postId={postItem?.id}
         forwardedRef={commentListRef}
-      ></CommentList>
+      ></CommentList> */}
     </div>
   );
 };

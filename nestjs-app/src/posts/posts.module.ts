@@ -5,10 +5,11 @@ import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
 import { UsersModule } from 'src/users/users.module';
 import { CommentEntity } from './comment.entity';
+import { ImageEntity } from './image.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PostsEntity, CommentEntity]),
+    TypeOrmModule.forFeature([PostsEntity, CommentEntity, ImageEntity]),
     UsersModule,
   ],
   controllers: [PostsController],

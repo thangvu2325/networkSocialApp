@@ -23,6 +23,8 @@ import HeaderSearchBox from "./HeaderSearchBox";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks";
 import { settingAction } from "@/app/_redux/slice/settingsSlice";
 import { settingsSelector } from "@/app/_redux/selectors";
+import Avatar from "@/app/_components/Avatar";
+import { useSession } from "next-auth/react";
 interface HeaderProps {}
 export const dataColorTheme: Array<{ value: string; color: string }> = [
   { value: "red", color: "#ff3b30" },
@@ -43,6 +45,7 @@ const Header: FunctionComponent<HeaderProps> = () => {
     value: string;
     color: string;
   }>({ value: "blue", color: "#05f" });
+  const { data: session, status } = useSession();
   const [showSearchBox, setShowSearchBox] = useState<boolean>(false);
   const pathname = usePathname();
   const dispatch = useAppDispatch();
@@ -289,17 +292,15 @@ const Header: FunctionComponent<HeaderProps> = () => {
           >
             <IconMenuDeep width={30} height={30} stroke={1.5} />
           </span>
-          <span className="p-2 ml-[16px] cursor-pointer mr-[16px] hidden lg:inline ">
-            <Image
-              className="rounded-full"
-              src={
-                "https://scontent.fsgn2-4.fna.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?stp=cp0_dst-png_p60x60&_nc_cat=1&ccb=1-7&_nc_sid=2b6aad&_nc_ohc=x-5IH6VdBkQAX9cXvXo&_nc_ht=scontent.fsgn2-4.fna&oh=00_AfDJWLJmZ7QFyae--v_SmuZRoCgdO6jtADAQWhclguo6fQ&oe=657447B8"
-              }
-              alt="avatar"
-              width={30}
-              height={30}
-            />
-          </span>
+          <Link
+            href={"/settings"}
+            className="p-2 ml-[16px] cursor-pointer mr-[16px] hidden lg:inline "
+          >
+            <Avatar
+              src={session?.user.image}
+              name={session?.user.nickName}
+            ></Avatar>
+          </Link>
         </div>
       </div>
       <HeaderSearchBox

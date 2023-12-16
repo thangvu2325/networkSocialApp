@@ -43,7 +43,7 @@ export class PostsController {
   }
 
   @Post(':userId')
-  CreatePostForUser(
+  createPostForUser(
     @Body() post: PostsDto,
     @Param('userId') userId: string,
   ): Promise<PostsDto> {
@@ -52,6 +52,13 @@ export class PostsController {
   @Delete(':id')
   deleteUser(@Param() id: string): Promise<{ result: string }> {
     return this.postsService.deleteById(id);
+  }
+  @Put(':postId')
+  editPost(
+    @Body() post: PostsDto,
+    @Param('postId') postId: string,
+  ): Promise<{ result: string }> {
+    return this.postsService.update(postId, post);
   }
 
   // Comment

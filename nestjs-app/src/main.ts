@@ -12,7 +12,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   // Enable CORS so we can access the application from a different origin
-  app.enableCors();
+  app.enableCors({
+    origin: ['http://localhost:3000'],
+  });
 
   // Start the application
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

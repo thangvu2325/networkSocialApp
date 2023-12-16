@@ -15,6 +15,9 @@ import { Keyboard, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import { createAxios } from "@/app/_services/createInstance";
+import { getPost } from "@/app/_services/api";
 
 interface PostPageProps {
   params: { postId: string };
@@ -26,7 +29,12 @@ const PostPage: FunctionComponent<PostPageProps> = ({ params }) => {
   const router = useRouter();
   const controls = useAnimation();
   const ref = useRef<HTMLImageElement>(null);
-
+  const axiosClient = createAxios();
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["postData"],
+    queryFn: () => getPost(axiosClient),
+    enabled: !!params.postId,
+  });
   const handleZoom = (newZoom: number) => {
     if (newZoom >= 0.5 && newZoom <= 2) {
       setZoom(newZoom);
@@ -52,6 +60,7 @@ const PostPage: FunctionComponent<PostPageProps> = ({ params }) => {
     if (!fullScreen) {
       // Enter fullscreen
       if (ref.current && ref.current.requestFullscreen) {
+        setZoom(1);
         ref.current.requestFullscreen();
       }
     } else {
@@ -84,35 +93,25 @@ const PostPage: FunctionComponent<PostPageProps> = ({ params }) => {
           }}
           modules={[Navigation, Keyboard]}
         >
-          <SwiperSlide>
-            <Image
-              ref={ref}
-              src={
-                "https://scontent.fsgn2-11.fna.fbcdn.net/v/t39.30808-6/405182172_230381323400107_4758721588914334770_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=5f2048&_nc_ohc=gcNXPWxs7KoAX8tTnl2&_nc_ht=scontent.fsgn2-11.fna&oh=00_AfCd1shBKbEvk4lblAbPGNGx7QeEA3eH1HadjF8tX41gXg&oe=65682695"
-              }
-              width={0}
-              height={0}
-              loading="lazy"
-              sizes="100vw"
-              className="object-contain h-[100vh] w-[100vw] scale-100"
-              alt=""
-            ></Image>
-            <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <Image
-              ref={ref}
-              src={
-                "https://scontent.fsgn2-11.fna.fbcdn.net/v/t39.30808-6/405182172_230381323400107_4758721588914334770_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=5f2048&_nc_ohc=gcNXPWxs7KoAX8tTnl2&_nc_ht=scontent.fsgn2-11.fna&oh=00_AfCd1shBKbEvk4lblAbPGNGx7QeEA3eH1HadjF8tX41gXg&oe=65682695"
-              }
-              width={0}
-              height={0}
-              loading="lazy"
-              sizes="100vw"
-              className="object-contain h-[100vh] w-[100vw] scale-100"
-              alt=""
-            ></Image>
-          </SwiperSlide>
+          {!isLoading
+            ? data.posts
+                .find((post: postType) => post.id === params.postId)
+                .images.map((image: imageType) => (
+                  <SwiperSlide key={image.id}>
+                    <Image
+                      ref={ref}
+                      src={image.src}
+                      width={0}
+                      height={0}
+                      loading="lazy"
+                      sizes="100vw"
+                      className="object-contain h-[100vh] w-[100vw] scale-100"
+                      alt=""
+                    ></Image>
+                    <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                  </SwiperSlide>
+                ))
+            : ""}
         </Swiper>
       </motion.div>
       <div className="flex justify-between">

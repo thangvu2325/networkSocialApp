@@ -1,11 +1,5 @@
 import dynamic from "next/dynamic";
-import {
-  FunctionComponent,
-  useState,
-  useEffect,
-  ReactNode,
-  Fragment,
-} from "react";
+import { FunctionComponent, useState, useEffect, Fragment } from "react";
 import { useInView } from "react-intersection-observer";
 
 interface PostListProps {
@@ -39,7 +33,7 @@ const PostList: FunctionComponent<PostListProps> = ({ data }) => {
   useEffect(() => {
     if (inView) {
       // Kiểm tra xem đã hiển thị hết mảng data chưa
-      if (page < data.length) {
+      if (page < data?.length) {
         loadMoreDynamicPost();
       }
     }
@@ -55,7 +49,7 @@ const PostList: FunctionComponent<PostListProps> = ({ data }) => {
         ) : (
           <p>No posts to display.</p>
         )}
-        {!(page >= data.length) ? (
+        {!(page >= data?.length) ? (
           <div ref={ref} className="mt-[20px] w-[100%] h-[50px] text-center">
             Loading...
           </div>

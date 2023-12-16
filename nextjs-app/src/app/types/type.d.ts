@@ -2,8 +2,8 @@ type postType = {
   id: string;
   user: userType;
   text: string;
-  images: Array<image>;
-  videos?: Array<video>;
+  images: Array<imageType>;
+  videos?: Array<videoType>;
   likes: Array<emotionType>;
   disLikes: Array<emotionType>;
   shares: Array<shareType>;
@@ -12,7 +12,7 @@ type postType = {
   updatedAt: string;
 };
 type imageType = {
-  url: string;
+  src: string;
   id: string;
 };
 type videoType = {
@@ -47,4 +47,9 @@ type userType = {
   bio: string;
   roles: string;
   nickName: string;
+};
+type userRegisterType = {
+  nickName: string;
+  username: string;
+  password: string;
 };

@@ -10,6 +10,7 @@ import { CommentEntity } from './posts/comment.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { RedisModule } from './redis/redis.module';
+import { ImageEntity } from './posts/image.entity';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { RedisModule } from './redis/redis.module';
         username: configService.get('MYSQLDB_USER'),
         password: configService.get('MYSQLDB_PASSWORD'),
         database: configService.get('MYSQLDB_DATABASE'),
-        entities: [CommentEntity, PostsEntity, UserEntity],
+        entities: [CommentEntity, PostsEntity, UserEntity, ImageEntity],
         synchronize: true,
       }),
     }),

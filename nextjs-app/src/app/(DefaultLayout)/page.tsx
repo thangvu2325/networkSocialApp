@@ -17,11 +17,11 @@ import { useQuery } from "@tanstack/react-query";
 import { getPost } from "../_services/api";
 import { createAxios } from "../_services/createInstance";
 import { useSession } from "next-auth/react";
+import Avatar from "../_components/Avatar";
 interface HomeProps {}
 
 const Home: FunctionComponent<HomeProps> = () => {
   const { data: session, status } = useSession();
-  console.log(session, status);
   const axiosClient = createAxios();
   const { isLoading, error, data } = useQuery({
     queryKey: ["postData"],
@@ -30,7 +30,7 @@ const Home: FunctionComponent<HomeProps> = () => {
 
   return (
     <div className="pt-[20px] pb-[200px] h-[2000px]">
-      <div className="mx-auto">
+      <div className="mx-[auto]">
         <div className="flex justify-center">
           <div className="w-[660px] max-lg:w-[100%] px-[15px] ">
             <div className=" overflow-hidden">
@@ -96,15 +96,10 @@ const Home: FunctionComponent<HomeProps> = () => {
                 </div>
                 <div className="mt-[16px] flex  relative mb-[8.8px]">
                   <figure className="mt-[4px] ml-[8px] mb-[16px] absolute top-[3px]">
-                    <Image
-                      src={
-                        "https://scontent.fsgn2-4.fna.fbcdn.net/v/t1.30497-1/143086968_2856368904622192_1959732218791162458_n.png?stp=cp0_dst-png_p60x60&_nc_cat=1&ccb=1-7&_nc_sid=2b6aad&_nc_ohc=x-5IH6VdBkQAX9cXvXo&_nc_ht=scontent.fsgn2-4.fna&oh=00_AfDJWLJmZ7QFyae--v_SmuZRoCgdO6jtADAQWhclguo6fQ&oe=657447B8"
-                      }
-                      alt="logo"
-                      width={30}
-                      height={30}
-                      className="rounded-[30px]"
-                    />
+                    <Avatar
+                      src={session?.user.image}
+                      name={session?.user.nickName}
+                    ></Avatar>
                   </figure>
                   <textarea
                     spellCheck={false}

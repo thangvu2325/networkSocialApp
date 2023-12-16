@@ -7,9 +7,15 @@ import { AuthService } from './auth.service';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { RedisModule } from 'src/redis/redis.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity]), UsersModule, RedisModule],
+  imports: [
+    TypeOrmModule.forFeature([UserEntity]),
+    UsersModule,
+    RedisModule,
+    PassportModule,
+  ],
   controllers: [AuthController],
   providers: [AuthService, UsersService, JwtService],
 })

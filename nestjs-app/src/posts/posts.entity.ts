@@ -2,6 +2,7 @@ import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { BaseEntity } from 'src/common/mysql/base.entity';
 import { UserEntity } from 'src/users/user.entity';
 import { CommentEntity } from './comment.entity';
+import { ImageEntity } from './image.entity';
 
 @Entity({
   name: 'posts',
@@ -9,9 +10,6 @@ import { CommentEntity } from './comment.entity';
 export class PostsEntity extends BaseEntity {
   @Column()
   text: string;
-
-  @Column('simple-array', { nullable: true })
-  images: string[];
 
   @Column('simple-array', { nullable: true })
   videos: string[];
@@ -24,6 +22,10 @@ export class PostsEntity extends BaseEntity {
 
   @Column('simple-array', { nullable: true })
   shares: string[];
+
+  @OneToMany(() => ImageEntity, (image) => image.post, { eager: true })
+  @JoinColumn()
+  images: Array<ImageEntity>;
 
   @OneToMany(() => CommentEntity, (comment) => comment.post, { eager: true })
   @JoinColumn()

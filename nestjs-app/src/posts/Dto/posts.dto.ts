@@ -2,11 +2,12 @@ import { Expose } from 'class-transformer';
 import { BaseDto } from 'src/common/base.dto';
 import { UsersDto } from 'src/users/users.dto';
 import { CommentDto } from './comment.dto';
+import { ImageDto } from './image.dto';
 export class PostsDto extends BaseDto {
   @Expose()
   text: string;
   @Expose()
-  images: Array<string>;
+  images: Array<ImageDto>;
   @Expose()
   videos?: Array<string>;
   @Expose()

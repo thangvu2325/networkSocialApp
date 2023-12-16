@@ -6,7 +6,6 @@ import { UserEntity } from 'src/users/user.entity';
 import { LoginDto } from './Dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { RedisService } from 'src/redis/redis.service';
-
 const EXPIRE_TIME = 20 * 1000;
 
 @Injectable()
@@ -25,7 +24,6 @@ export class AuthService {
         name: user.nickName,
       },
     };
-
     const accessToken = await this.jwtService.signAsync(payload, {
       expiresIn: '20s',
       secret: process.env.jwtSecretKey,
@@ -68,7 +66,6 @@ export class AuthService {
       username: user.username,
       sub: user.sub,
     };
-
     return {
       accessToken: await this.jwtService.signAsync(payload, {
         expiresIn: '20s',

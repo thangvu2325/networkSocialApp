@@ -1,18 +1,16 @@
 "use client";
 import Header from "@/app/_layoutComponents/Header";
-import { FunctionComponent, ReactNode } from "react";
+import { Fragment, FunctionComponent, ReactNode } from "react";
 import Navbar from "../_layoutComponents/Navbar";
 import Sidebar from "../_layoutComponents/Sidebar";
 import Footer from "../_layoutComponents/Footer";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 interface DefaultLayoutProps {
   children: ReactNode;
 }
-const queryClient = new QueryClient();
 const DefaultLayout: FunctionComponent<DefaultLayoutProps> = ({ children }) => {
   return (
-    <QueryClientProvider client={queryClient}>
+    <Fragment>
       <Header></Header>
       <Navbar></Navbar>
       <Sidebar></Sidebar>
@@ -20,7 +18,7 @@ const DefaultLayout: FunctionComponent<DefaultLayoutProps> = ({ children }) => {
         {children}
       </div>
       <Footer />
-    </QueryClientProvider>
+    </Fragment>
   );
 };
 

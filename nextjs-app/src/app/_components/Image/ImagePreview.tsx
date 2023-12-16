@@ -16,7 +16,7 @@ const ImagePreview: FunctionComponent<ImagePreviewProps> = ({
 }) => {
   return (
     <NextImage
-      src={imageData?.url || ""}
+      src={imageData?.src || ""}
       alt={`image ${i}`}
       width={0}
       height={0}

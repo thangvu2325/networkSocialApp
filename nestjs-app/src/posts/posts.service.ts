@@ -9,6 +9,8 @@ import { UsersService } from 'src/users/users.service';
 import { CommentDto } from './Dto/comment.dto';
 import { CommentEntity } from './comment.entity';
 import { UsersDto } from 'src/users/users.dto';
+import { ImageEntity } from './image.entity';
+import { ImageDto } from './Dto/image.dto';
 
 @Injectable()
 export class PostsService extends MysqlBaseService<PostsEntity, PostsDto> {
@@ -18,6 +20,8 @@ export class PostsService extends MysqlBaseService<PostsEntity, PostsDto> {
     private readonly usersService: UsersService,
     @InjectRepository(CommentEntity)
     private readonly commentRepository: Repository<CommentEntity>,
+    @InjectRepository(ImageEntity)
+    private readonly imageRepository: Repository<ImageEntity>,
   ) {
     super(postRepository, PostsDto);
   }
@@ -27,7 +31,8 @@ export class PostsService extends MysqlBaseService<PostsEntity, PostsDto> {
     const qb = await this.postRepository
       .createQueryBuilder('posts')
       .leftJoinAndSelect('posts.user', 'user')
-      .leftJoinAndSelect('posts.comments', 'comments');
+      .leftJoinAndSelect('posts.comments', 'comments')
+      .leftJoinAndSelect('posts.images', 'images');
 
     qb.where('1 = 1');
 
@@ -51,9 +56,17 @@ export class PostsService extends MysqlBaseService<PostsEntity, PostsDto> {
       const transformedComment = plainToInstance(CommentDto, post.comments, {
         excludeExtraneousValues: true,
       });
+      const transformedImage = plainToInstance(ImageDto, post.images, {
+        excludeExtraneousValues: true,
+      });
       return plainToInstance(
         PostsDto,
-        { ...post, user: transformedUser, comments: transformedComment },
+        {
+          ...post,
+          user: transformedUser,
+          comments: transformedComment,
+          images: transformedImage,
+        },
         { excludeExtraneousValues: true },
       );
     });
@@ -66,17 +79,25 @@ export class PostsService extends MysqlBaseService<PostsEntity, PostsDto> {
         id: userId,
       },
     });
+
     if (!user) {
-      throw new Error('User not found'); // Handle this according to your application's logic
+      throw new Error('User not found');
     }
+
+    const images = post.images.map((image) => {
+      const imageData: ImageEntity = this.imageRepository.create(image);
+      return imageData;
+    });
+
+    await this.imageRepository.save(images);
 
     const newPost = this.postRepository.create({
       ...post,
       user,
-      comments: [],
+      images,
     });
 
-    await this.postRepository.save(newPost); // Use the correct repository
+    await this.postRepository.save(newPost);
 
     return plainToInstance(PostsDto, newPost, {
       excludeExtraneousValues: true,
